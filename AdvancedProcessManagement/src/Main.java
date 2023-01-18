@@ -2,16 +2,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
         int numComands = 0;
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader output;
         File inputFile = new File("input.txt");
+        File outputFile = new File("output.txt");
         ProcessBuilder pb1 = new ProcessBuilder();
         ProcessBuilder pb2 = new ProcessBuilder();
-        Process process1 = null;
         Process process2 = null;
         while (numComands < 2) {
             String[] command = {};
@@ -33,22 +33,25 @@ public class Main {
             System.err.println(e.getMessage());
         }
         pb1.redirectInput(inputFile);
-        pb2.redirectInput(pb1.redirectOutput());
+        pb1.redirectOutput(pb2.redirectInput());
+        pb2.redirectOutput(outputFile);
         try {
-            process1 = pb1.start();
-            while (process1.isAlive())
-                Thread.sleep(10);
+            pb1.start();
+            System.out.println("Process 1 started");
             process2 = pb2.start();
+            System.out.println("Process 2 started");
         }catch (Exception e){
             System.err.println("Wrong command input: " + e.getMessage());
         }
         if (process2 != null)
             try {
-                StringBuilder builder = new StringBuilder();
-                while(process2.getInputStream().read() != 0) {
-                    builder.append(process2.getInputStream().read());
+                output = new BufferedReader(new InputStreamReader(process2.getInputStream()));
+                System.out.println("Reading process 2 output");
+                while(output.ready()) {
+                    System.out.println(output.readLine());
                 }
-                System.out.println(builder);
+                input.close();
+                output.close();
             }catch (IOException e) {
                 System.err.println(e.getMessage());
             }
