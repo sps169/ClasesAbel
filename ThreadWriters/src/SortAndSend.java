@@ -12,7 +12,11 @@ public class SortAndSend {
         for (int i = 0; i < args.length; i++) {
             Writer writer = new Writer(args[i]);
             Thread thread = new Thread(this.threads, writer, "Writer "+ i);
-//            thread.setPriority((int)(((double)args.length / 10.0) + 1.0 + (double)i/10.0));
+            if (i < 10) {
+                thread.setPriority(i + 1);
+            }else {
+                thread.setPriority(10);
+            }
             thread.start();
         }
     }

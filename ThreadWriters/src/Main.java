@@ -9,6 +9,6 @@ public class Main {
                 System.err.println(e.getMessage());
             }
         }
-        System.out.println("\nLos hilos han finalizado su ejecución");
+        System.out.println("\nFin del programa");
     }
 }
