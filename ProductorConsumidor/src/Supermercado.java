@@ -7,13 +7,17 @@ public class Supermercado {
     private int nClientes;
     private int velocidad;
 
-    public Supermercado(int nCajas, int nClientes) {
+    private int nProductores;
+
+    public Supermercado(int nProductores, int nCajas, int nClientes) {
+        this.nProductores = nProductores;
         this.nCajas = nCajas;
         this.nClientes = nClientes;
         this.velocidad = 1;
     }
 
-    public Supermercado(int nCajas, int nClientes, int velocidad) {
+    public Supermercado(int nProductores, int nCajas, int nClientes, int velocidad) {
+        this.nProductores = nProductores;
         this.nCajas = nCajas;
         this.nClientes = nClientes;
         if (velocidad > 0)
@@ -23,6 +27,7 @@ public class Supermercado {
     }
 
     public Supermercado() {
+        this.nProductores = 2;
         this.nCajas = 3;
         this.nClientes = 0;
         this.velocidad = 1;
@@ -30,10 +35,9 @@ public class Supermercado {
 
     public void run() {
         Cola clientes = new Cola();
-        ProductorClientes productorClientes = new ProductorClientes('A', nClientes, velocidad, clientes);
-        ProductorClientes productorClientes2 = new ProductorClientes('B', nClientes, velocidad, clientes);
-        productorClientes2.start();
-        productorClientes.start();
+        for (char c = 'A'; (c - 'A') < nProductores; c++) {
+            new ProductorClientes(c, nClientes, velocidad, clientes).start();
+        }
         for (int i = 0; i < nCajas; i++) {
             Caja caja = new Caja("Caja " + (i + 1), clientes);
             caja.start();
