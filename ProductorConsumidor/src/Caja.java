@@ -20,6 +20,7 @@ public class Caja extends Thread{
             }
             Cliente cliente = cola.siguienteCliente();
             if (cliente != null) {
+                milisecsWaiting = 0;
                 System.out.println("Cliente " + cliente.getNombre() + " entra a caja " + this.nombre);
                 cliente.procesar();
                 System.out.println("Cliente " + cliente.getNombre() + " sale de la caja " + this.nombre);
